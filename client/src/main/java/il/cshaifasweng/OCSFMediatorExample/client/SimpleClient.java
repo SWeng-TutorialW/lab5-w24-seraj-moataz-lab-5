@@ -23,13 +23,15 @@ public class SimpleClient extends AbstractClient {
 		}else if(message.getMessage().equals("Error! we got an empty message")){
 			EventBus.getDefault().post(new ErrorEvent(message));
 		}else {
+			System.out.println("I'm Here!");
 			EventBus.getDefault().post(new MessageEvent(message));
+
 		}
 	}
 	
 	public static SimpleClient getClient() {
 		if (client == null) {
-			client = new SimpleClient("localhost", 3000);
+			client = new SimpleClient("localhost", 3001);
 		}
 		return client;
 	}
