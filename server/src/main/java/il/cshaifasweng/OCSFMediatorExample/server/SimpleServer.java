@@ -1,4 +1,5 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
+import javax.script.ScriptEngineManager;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
@@ -6,7 +7,12 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -48,25 +54,36 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("send Submitters IDs")){
-				//add code here to send submitters IDs to client
+				message.setMessage("319050241,212930697");
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("send Submitters")){
-				//add code here to send submitters names to client
+				message.setMessage("SerajJabareen, MoatazOdeh");
+				client.sendToClient(message);
+
 			}
 			else if (request.equals("what’s the time?")) {
-				//add code here to send the time to client
+				Date currentDate = new Date();
+
+				SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+				message.setMessage(formatter.format(currentDate));
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("multiply")){
 				//add code here to multiply 2 numbers received in the message and send result back to client
 				//(use substring method as shown above)
 				//message format: "multiply n*m"
+
+				String expression = request.substring(9);
+				String[] arrOfExp = expression.split("\\*");
+				String result = String.valueOf(Integer.parseInt((arrOfExp[0])) * Integer.parseInt(arrOfExp[1]));
+				message.setMessage(result);
+				client.sendToClient(message);
+
 			}else{
-				//add code here to send received message to all clients.
-				//The string we received in the message is the message we will send back to all clients subscribed.
-				//Example:
-					// message received: "Good morning"
-					// message sent: "Good morning"
-				//see code for changing submitters IDs for help
+				message.setMessage(request);
+				sendToAllClients(message);
+
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
