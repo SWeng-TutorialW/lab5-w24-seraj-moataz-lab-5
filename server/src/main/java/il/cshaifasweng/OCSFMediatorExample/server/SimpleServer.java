@@ -81,6 +81,7 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 
 			}else{
+//				System.out.println(((Message) msg).getMessage());
 				message.setMessage(request);
 				sendToAllClients(message);
 
